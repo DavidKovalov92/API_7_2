@@ -1,14 +1,14 @@
-from typing import List, Dict
+from typing import Dict
 import requests
 from pprint import pprint
 
 important_info = {
-        'name': '',
-        'description': '',
-        'owner': '',
-        'license': '',
-        'created_at': '',
-    }
+    'name': '',
+    'description': '',
+    'owner': '',
+    'license': '',
+    'created_at': '',
+}
 
 def get_repository_info(repo_name: str) -> Dict[str, str]:
     repo_name = repo_name.replace('/', ' ')
@@ -16,12 +16,24 @@ def get_repository_info(repo_name: str) -> Dict[str, str]:
 
     req_ = requests.get(f'https://api.github.com/repos/{OWNER}/{REPO}')
 
+    if req_.status_code != 200:
+        raise PermissionError(f"Status code: {req_.status_code}")
+
+
     MY_JSON = req_.json()
 
-    clear_info = []
+
+    if MY_JSON:
+        print('JSON not empty')
+    else:
+        print('JSON is empty')
+
+
+
+    clear_info = {}
     for key in important_info.keys():
         if key in MY_JSON:
-            clear_info.append(MY_JSON[key])
+            clear_info[key] = MY_JSON[key]
 
     return clear_info
 

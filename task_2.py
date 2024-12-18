@@ -13,7 +13,15 @@ def get_recent_commits(repo_name: str) -> List[Dict[str, str]]:
 
 
     req_ = requests.get(f'https://api.github.com/repos/{OWNER}/{REPO}/commits', params=params)
+    if req_.status_code != 200:
+        raise PermissionError(f'Status code {req_.status_code}')
+
     MY_JSON = req_.json()
+
+    if MY_JSON:
+        print('JSON is not empty')
+    else:
+        print('JSON is empty')
 
     commit_info = []
 
