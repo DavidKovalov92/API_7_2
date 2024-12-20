@@ -10,14 +10,18 @@ important_info = {
     'created_at': '',
 }
 
+def status_(request):
+    return request.status_code
+
+
 def get_repository_info(repo_name: str) -> Dict[str, str]:
     repo_name = repo_name.replace('/', ' ')
     OWNER, REPO = repo_name.split()
 
     req_ = requests.get(f'https://api.github.com/repos/{OWNER}/{REPO}')
 
-    if req_.status_code != 200:
-        raise PermissionError(f"Status code: {req_.status_code}")
+    if status_(req_) != 200:
+        raise PermissionError(f"Status code: {status_(req_)}")
 
 
     MY_JSON = req_.json()
@@ -27,6 +31,7 @@ def get_repository_info(repo_name: str) -> Dict[str, str]:
         print('JSON not empty')
     else:
         print('JSON is empty')
+        return None
 
 
 

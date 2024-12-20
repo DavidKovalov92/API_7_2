@@ -2,6 +2,8 @@ import requests
 from typing import List, Dict
 from pprint import pprint
 
+def status_(request):
+    return request.status_code
 
 def get_recent_commits(repo_name: str) -> List[Dict[str, str]]:
     repo_name = repo_name.replace('/', ' ')
@@ -13,7 +15,7 @@ def get_recent_commits(repo_name: str) -> List[Dict[str, str]]:
 
 
     req_ = requests.get(f'https://api.github.com/repos/{OWNER}/{REPO}/commits', params=params)
-    if req_.status_code != 200:
+    if status_(req_) != 200:
         raise PermissionError(f'Status code {req_.status_code}')
 
     MY_JSON = req_.json()
@@ -22,6 +24,7 @@ def get_recent_commits(repo_name: str) -> List[Dict[str, str]]:
         print('JSON is not empty')
     else:
         print('JSON is empty')
+        return None
 
     commit_info = []
 
